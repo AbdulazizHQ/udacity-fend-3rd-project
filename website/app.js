@@ -46,14 +46,18 @@ async function postWeather (temprature, date, userResponse) {
   if (!request.ok) {
     console.log(`Failed request: ${request.statusText}`)
   } else {
-    return temprature
+    return await request.json()
   }
 }
 
-function updateMostRecentEntry (temprature, date, userResponse) {
-  mostRecentTemprature.innerHTML = temprature
-  mostRecentDate.innerHTML = date
-  mostRecentContent.innerHTML = userResponse
+async function updateMostRecentEntry (key) {
+  const request = await fetch('/all')
+  const data = await request.json()
+  const latestEntry = data[key]
+
+  mostRecentTemprature.innerHTML = latestEntry.temprature
+  mostRecentDate.innerHTML = latestEntry.date
+  mostRecentContent.innerHTML = latestEntry.userResponse
 }
 
 generateButton.addEventListener('click', async () => {
@@ -61,6 +65,6 @@ generateButton.addEventListener('click', async () => {
   const userResponse = userResponseField.value
   getWeather(zipcode)
     .then(temp => postWeather(temp, newDate, userResponse))
-    .then(temp => updateMostRecentEntry(temp, newDate, userResponse))
+    .then(response => updateMostRecentEntry(response.key))
     .catch(error => console.log(error))
 })
