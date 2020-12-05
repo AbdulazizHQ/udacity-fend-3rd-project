@@ -1,6 +1,7 @@
 /* Global Variables */
 const url = 'https://api.openweathermap.org/data/2.5/weather?'
 const apiKey = 'cb6d58000d1ca95884bfaef5c0cda2cb'
+const units = 'metric'
 
 const generateButton = document.getElementById('generate')
 const zipcodeField = document.getElementById('zip')
@@ -17,7 +18,8 @@ const newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear()
 async function getWeather (zipcode) {
   const params = new URLSearchParams({
     zip: zipcode,
-    appid: apiKey
+    appid: apiKey,
+    units: units
   })
 
   const response = await fetch(url + params)
